@@ -1,0 +1,11 @@
+{
+  "name": "potionseller",
+  "version": "1.0.0",
+  "description": "REST API Project for Point of Sale and Inventory Management",
+  "author": "thuyaaung",
+  "dependencies": {
+    "body-parser": "^1.14.1",
+    "express": "^4.13.3",
+    "mongoose": "^4.2.5"
+  }
+}
