@@ -2,25 +2,38 @@
 // Express app
 var express 	= require('express');
 var app 		= express();
+var morgan 		= require('morgan')
+var bodyParser 	= require('body-parser');
+var mongoose 	= require('mongoose');
 
-// Requires body-parser
-var bodyParser = require('body-parser');
+var config 		= require('./config');
+configs 		= config();
+console.log(configs);
 
-
-// Use body-parser
-// This will let us get the data from a POST
+// Middleware
+// -----------
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(morgan('dev'))
 
-// Set PORT
-var port = process.env.PORT || 3100;
+// DB
+// --
+var dbstring = 'mongodb://'+configs.dbhost+':'+configs.dbport+'/'+configs.dbname;
+console.log('Connecting to db: '+dbstring);
+mongoose.connect(dbstring);
+console.log('db connected');
 
+// Setup
+// -----
+var port = config().port;
 
-
+// Routes
+// ------
 // Set ROUTES from router.js
-var router = require('./router');
+var router = require('./routes');
 app.use('/', router);
 
-
+// Start app
+// ---------
 app.listen(port);
-console.log('server started on '+port);
+console.log('Magic happening at: ' + port);
