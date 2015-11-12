@@ -11,7 +11,7 @@ router.use(function(req, res, next){
 
 // HOME
 router.get('/', function(req, res){
-	res.json({ message: 'welcome to potionseller API'});
+	res.json({ message: 'welcome to potionseller API ' + req.headers['x-subdomain']});
 });
 
 

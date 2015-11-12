@@ -13,17 +13,17 @@ module.exports = function(){
 
 	switch(process.env.NODE_ENV){
 
-		case 'dev':
+		case 'development':
 			return {
-				port: 3333,
+				port: 5555,
 				dbhost: 'localhost',
 				dbport: 27017,
 				dbname: 'potionsellerdb'
 			};
 
-		case 'pro':
+		case 'production':
 			return {
-				port: 4444,
+				port: 5555,
 				dbhost: 'localhost',
 				dbport: 27017,
 				dbname: 'potionsellerdb'
