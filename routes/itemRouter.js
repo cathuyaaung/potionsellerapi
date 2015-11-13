@@ -10,11 +10,13 @@ var Item = models.Item;
 // GET ALL
 router.get('/', function(req, res){ 
 	Item.find({ category: req.params.categoryid }, function(err, items){
-		if (err) { res.send(err); }
-		Item.populate(items, { path:'category' }, function(err, items){
-			if (err) { res.send(err); }
-			res.json(items);	
-		});
+		if (err) { res.send(err); } else {
+			Item.populate(items, { path:'category' }, function(err, items){
+				if (err) { res.send(err); } else {
+					res.json(items);	
+				}
+			});
+		}
 	});
 });
 
@@ -28,11 +30,13 @@ router.route('/').post(function(req, res){
 		item.desc = req.body.desc;
 		item.category = category;
 		item.save(function(err){
-			if (err) { res.send(err); }
-			Item.populate(item, { path:'category' }, function(err, item){
-				if (err) { res.send(err); }
-				res.json( { message: 'item created', item } );
-			});
+			if (err) { res.send(err); } else {
+				Item.populate(item, { path:'category' }, function(err, item){
+					if (err) { res.send(err); } else {
+						res.json( { message: 'item created', item } );
+					}
+				});
+			}
 		});			
 	});
 });
@@ -40,35 +44,41 @@ router.route('/').post(function(req, res){
 // GET ONE
 router.get('/:itemid', function(req, res){ 
 	Item.findById(req.params.itemid, function(err, item){
-		if (err) { res.send(err); }
-		Item.populate(item, {path:'category'}, function(err, item){
-			if (err) { res.send(err); }
-			res.json(item);
-		});
+		if (err) { res.send(err); } else {
+			Item.populate(item, {path:'category'}, function(err, item){
+				if (err) { res.send(err); } else {
+					res.json(item);
+				}
+			});
+		}
 	});
 });
 
 // PUT
 router.put('/:itemid', function(req, res){ 
 	Item.findById(req.params.itemid, function(err, item){
-		if (err) { res.send(err); }
-		item.name = req.body.name;
-		item.desc = req.body.desc;
-		item.save(function(err){
-			if (err) { res.send(err); }
-			Item.populate(item, {path:'category'}, function(err, item){
-				if (err) { res.send(err); }
-				res.json( { message: 'Item updated', item } );
+		if (err) { res.send(err); } else {
+			item.name = req.body.name;
+			item.desc = req.body.desc;
+			item.save(function(err){
+				if (err) { res.send(err); } else {
+					Item.populate(item, {path:'category'}, function(err, item){
+						if (err) { res.send(err); } else {
+							res.json( { message: 'Item updated', item } );
+						}
+					});
+				}
 			});
-		});
+		}
 	});
 });
 
 // DELETE
 router.delete('/:itemid', function(req, res){ 
 	Item.remove({ _id: req.params.itemid }, function(err){
-		if (err) { res.send(err); }
-		res.json( { message: 'item deleted' } );
+		if (err) { res.send(err); } else {
+			res.json( { message: 'item deleted' } );
+		}
 	});
 });
 

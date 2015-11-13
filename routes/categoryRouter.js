@@ -10,8 +10,9 @@ var Category = models.Category;
 // GET ALL
 router.get('/', function(req, res){ 
 	Category.find(function(err, categories){
-		if (err) { res.send(err); }
-		res.json(categories);
+		if (err) { res.send(err); } else {
+			res.json(categories);
+		}
 	});
 });
 
@@ -21,38 +22,43 @@ router.route('/').post(function(req, res){
 	category.name = req.body.name;
 	category.desc = req.body.desc;
 	category.save(function(err){
-		if (err) { res.send(err); }
-		res.json( { message: 'Category created', category } );
+		if (err) { res.send(err); } else {
+			res.json( { message: 'Category created', category } );	
+		}
 	});
 });
 
 // GET ONE
 router.get('/:id', function(req, res){
 	Category.findById(req.params.id, function(err, category){
-		if (err) { res.send(err); }
-		res.json(category);
+		if (err) { res.send(err); } else {
+			res.json(category);
+	    }
 	});
 });
 
 // PUT
 router.put('/:id', function(req, res){
 	Category.findById(req.params.id, function(err, category){
-		if (err) { res.send(err); }
-		category.name = req.body.name;
-		category.desc = req.body.desc;
-		category.save(function(err){
-			console.log(category);
-			if (err) { res.send(err); }
-			res.json( {message: 'Category updated', category} );
-		});
+		if (err) { res.send(err); } else {
+			category.name = req.body.name;
+			category.desc = req.body.desc;
+			category.save(function(err){
+				console.log(category);
+				if (err) { res.send(err); } else {
+					res.json( {message: 'Category updated', category} );
+				}
+			});
+		}
 	});
 });
 
 // DELETE
 router.delete('/:id', function(req, res){
 	Category.remove({ _id: req.params.id }, function(err, category){
-		if (err) { res.send(err); }
-		res.json( { message: 'category deleted' } );
+		if (err) { res.send(err); } else {
+			res.json( { message: 'category deleted' } );
+		}
 	});
 });
 
