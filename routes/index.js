@@ -1,8 +1,8 @@
 
 var express = require('express');
-var router = express.Router();
+var router = express.Router({mergeParams: true});
 var categoryRouter = require('./categoryRouter');
-
+var itemRouter = require('./itemRouter');
 
 // Default Start
 router.use(function(req, res, next){
@@ -15,8 +15,14 @@ router.get('/', function(req, res){
 });
 
 
-// /category routes
+// /categories [GET, POST, PUT, DELETE]
+// Categories route
 router.use('/category', categoryRouter);
+
+// /category/:categoryid/ [GET, POST, POST, DELETE]
+// Items route
+router.use('/category/:categoryid/item', itemRouter);
+
 
 
 

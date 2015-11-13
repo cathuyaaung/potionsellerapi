@@ -1,0 +1,76 @@
+
+var router = require('express').Router({mergeParams: true});
+var models = require('./../models');
+var Category = models.Category;
+var Item = models.Item;
+
+// HANDLES Requests at -> /category/:categoryid/item 
+// GET ALL, POST, GET ONE, PUT, DELETE
+
+// GET ALL
+router.get('/', function(req, res){ 
+	Item.find({ category: req.params.categoryid }, function(err, items){
+		if (err) { res.send(err); }
+		Item.populate(items, { path:'category' }, function(err, items){
+			if (err) { res.send(err); }
+			res.json(items);	
+		});
+	});
+});
+
+// POST
+router.route('/').post(function(req, res){	
+	Category.findById(req.params.categoryid, function(err, category){
+		if (err) { res.send(err); }
+		console.log(category);
+		var item = new Item;
+		item.name = req.body.name;
+		item.desc = req.body.desc;
+		item.category = category;
+		item.save(function(err){
+			if (err) { res.send(err); }
+			Item.populate(item, { path:'category' }, function(err, item){
+				if (err) { res.send(err); }
+				res.json( { message: 'item created', item } );
+			});
+		});			
+	});
+});
+
+// GET ONE
+router.get('/:itemid', function(req, res){ 
+	Item.findById(req.params.itemid, function(err, item){
+		if (err) { res.send(err); }
+		Item.populate(item, {path:'category'}, function(err, item){
+			if (err) { res.send(err); }
+			res.json(item);
+		});
+	});
+});
+
+// PUT
+router.put('/:itemid', function(req, res){ 
+	Item.findById(req.params.itemid, function(err, item){
+		if (err) { res.send(err); }
+		item.name = req.body.name;
+		item.desc = req.body.desc;
+		item.save(function(err){
+			if (err) { res.send(err); }
+			Item.populate(item, {path:'category'}, function(err, item){
+				if (err) { res.send(err); }
+				res.json( { message: 'Item updated', item } );
+			});
+		});
+	});
+});
+
+// DELETE
+router.delete('/:itemid', function(req, res){ 
+	Item.remove({ _id: req.params.itemid }, function(err){
+		if (err) { res.send(err); }
+		res.json( { message: 'item deleted' } );
+	});
+});
+
+
+module.exports = router;
