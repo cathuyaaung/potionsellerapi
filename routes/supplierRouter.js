@@ -43,6 +43,13 @@ router.put('/:supplierid', function(req, res){
 	}
 });
 
+router.delete('/:supplierid', function(req, res){
+	Supplier.remove({_id: req.params.supplierid}, function(err){
+		if (err) { res.status(500).send('unable to delete supplier'); } else {
+			res.json({message: 'supplier deleted'});
+		}
+	})
+});
 
 
 module.exports = router;

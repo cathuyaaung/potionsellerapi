@@ -1,9 +1,15 @@
 
 var express = require('express');
 var router = express.Router({mergeParams: true});
-var categoryRouter = require('./categoryRouter');
-var itemRouter = require('./itemRouter');
-var supplierRouter = require('./supplierRouter');
+
+var categoryRouter 		= require('./categoryRouter');
+var itemRouter 			= require('./itemRouter');
+var supplierRouter 		= require('./supplierRouter');
+var supplierRouter 		= require('./supplierRouter');
+var customerRouter 		= require('./customerRouter');
+var purchaseOrderRouter 		= require('./purchaseOrderRouter');
+var purchaseOrderItemRouter 	= require('./purchaseOrderItemRouter');
+var purchaseOrderPaymentRouter 	= require('./purchaseOrderPaymentRouter');
 
 // Default Start
 router.use(function(req, res, next){
@@ -23,23 +29,29 @@ router.get('/', function(req, res){
 
 
 
-
-// /categories [GET, POST, PUT, DELETE]
-// Categories route
+//Category
 router.use('/category', categoryRouter);
 
-// /category/:categoryid/ [GET, POST, POST, DELETE]
-// Items route
+//Item in Category
 router.use('/category/:categoryid/item', itemRouter);
 
+//Each Item
+router.use('/item/', itemRouter);
 
-router.use('/item/:item', itemRouter);
-
-
+//Supplier
 router.use('/supplier', supplierRouter);
 
+// Customer
+router.use('/customer', customerRouter);
 
+// Purchase Order
+router.use('/purchaseorder', purchaseOrderRouter);
 
+// Purchase Order Item
+router.use('/porder/:porderid/pitem', purchaseOrderItemRouter);
+
+// Purchase Order Payment Item
+router.use('/porder/:porderid/payment', purchaseOrderPaymentRouter);
 
 
 

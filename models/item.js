@@ -12,6 +12,11 @@ var ItemSchema = new Schema({
 		required: false,
 		maxlength: 500
 	},
+	count: {
+		type: Number,
+		required: true,
+		default: 0
+	},
 	category: {
 		type: Schema.ObjectId,
 		ref: 'Category'
