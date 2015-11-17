@@ -40,15 +40,19 @@ router.get('/:id', function(req, res){
 // PUT
 router.put('/:id', function(req, res){
 	Category.findById(req.params.id, function(err, category){
-		if (err) { res.send(err); } else {
-			category.name = req.body.name;
-			category.desc = req.body.desc;
-			category.save(function(err){
+		if (err) { res.status(500).send('category not found'); } else {
+			if (!category === undefined && category === null) {
+				category.name = req.body.name;
+				category.desc = req.body.desc;
+				category.save(function(err){
+					console.log(category);
+					if (err) { res.send(err); } else {
+						res.json( {message: 'Category updated', category} );
+					}
+				});
+			} else {
 				console.log(category);
-				if (err) { res.send(err); } else {
-					res.json( {message: 'Category updated', category} );
-				}
-			});
+			}
 		}
 	});
 });

@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var CategorySchema = new mongoose.Schema({
+var SupplierSchema = new mongoose.Schema({
 	name: {
 		type: String,
 		required: true,
@@ -13,4 +13,4 @@ var CategorySchema = new mongoose.Schema({
 	}
 });
 
-module.exports = mongoose.model('Category', CategorySchema);
+module.exports = mongoose.model('Supplier', SupplierSchema);

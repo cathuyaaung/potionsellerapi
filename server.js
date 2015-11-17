@@ -16,6 +16,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(morgan('dev'))
 
+
+// Uploads
+// -------
+app.use('/uploads',  express.static(__dirname + '/uploads'));
+
+
 // DB
 // --
 var dbstring = 'mongodb://'+configs.dbhost+':'+configs.dbport+'/'+configs.dbname;

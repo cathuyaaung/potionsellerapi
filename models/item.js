@@ -9,7 +9,7 @@ var ItemSchema = new Schema({
 	},
 	desc: {
 		type: String,
-		required: true,
+		required: false,
 		maxlength: 500
 	},
 	category: {

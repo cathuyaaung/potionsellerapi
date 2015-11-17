@@ -3,6 +3,7 @@ var express = require('express');
 var router = express.Router({mergeParams: true});
 var categoryRouter = require('./categoryRouter');
 var itemRouter = require('./itemRouter');
+var supplierRouter = require('./supplierRouter');
 
 // Default Start
 router.use(function(req, res, next){
@@ -19,6 +20,10 @@ router.get('/', function(req, res){
 });
 
 
+
+
+
+
 // /categories [GET, POST, PUT, DELETE]
 // Categories route
 router.use('/category', categoryRouter);
@@ -28,11 +33,36 @@ router.use('/category', categoryRouter);
 router.use('/category/:categoryid/item', itemRouter);
 
 
+router.use('/item/:item', itemRouter);
+
+
+router.use('/supplier', supplierRouter);
+
+
+
+
+
+
+
+
+
+
+router.post('/upload', function(req, res){
+	var path = require('path'),
+    fs = require('fs');
+	var tempPath = req.files.file.path;
+	var targetPath = path.resolve('./uploadFiles/' + req.files.file.name);
+	fs.rename(tempPath, targetPath, function(err) {
+		if (err) { res.send(err); } else {
+			console.log("Upload completed!");	
+		}
+	});
+});
 
 
 // 404
 router.use(function(req, res, next){
-	res.json({ message: 'API not found'});
+	res.status(404).send('API not found');
 	next();
 });
 
