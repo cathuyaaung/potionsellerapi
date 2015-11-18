@@ -7,14 +7,14 @@ exports.Item = Item;
 var Supplier = require('./supplier');
 exports.Supplier = Supplier;
 
-var Customer = require('./Customer');
+var Customer = require('./customer');
 exports.Customer = Customer;
 
-var PurchaseOrder = require('./PurchaseOrder');
+var PurchaseOrder = require('./purchaseOrder');
 exports.PurchaseOrder = PurchaseOrder;
 
-var PurchaseOrderItem = require('./PurchaseOrderItem');
+var PurchaseOrderItem = require('./purchaseOrderItem');
 exports.PurchaseOrderItem = PurchaseOrderItem;
 
-var PurchaseOrderPayment = require('./PurchaseOrderPayment');
+var PurchaseOrderPayment = require('./purchaseOrderPayment');
 exports.PurchaseOrderPayment = PurchaseOrderPayment;
