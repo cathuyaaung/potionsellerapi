@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var PurchaseOrderItemSchema = new Schema({
-	purchaseOrder: {
+	purchaseorder: {
 		type: Schema.ObjectId,
 		ref: 'PurchaseOrder',
 		required: true
@@ -10,7 +10,8 @@ var PurchaseOrderItemSchema = new Schema({
 	item: {
 		type: Schema.ObjectId,
 		ref: 'Item',
-		required: true
+		required: true,
+		autopopulate: true
 	},
 	count: {
 		type: Number,
@@ -23,5 +24,7 @@ var PurchaseOrderItemSchema = new Schema({
 		default: 0
 	}
 });
+
+PurchaseOrderItemSchema.plugin(require('mongoose-autopopulate'));
 
 module.exports = mongoose.model('PurchaseOrderItem', PurchaseOrderItemSchema);

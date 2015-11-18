@@ -9,18 +9,21 @@ var PurchaseOrderSchema = new Schema({
 	supplier: {
 		type: Schema.ObjectId,
 		ref: 'Supplier',
-		required: true
+		required: false, 
+		autopopulate: true
 	},
 	total: {
 		type: Number,
-		required: true,
+		required: false,
 		default: 0
 	},
 	remaining: {
 		type: Number,
-		required: true,
+		required: false,
 		default: 0
 	}	
 });
+
+PurchaseOrderSchema.plugin(require('mongoose-autopopulate'));
 
 module.exports = mongoose.model('PurchaseOrder', PurchaseOrderSchema);

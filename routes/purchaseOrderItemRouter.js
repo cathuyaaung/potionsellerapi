@@ -1,26 +1,42 @@
 var router = require('express').Router({mergeParams: true});
 var models = require('./../models');
-// var Supplier = models.Supplier;
+var PurchaseOrder = models.PurchaseOrder;
+var PurchaseOrderItem = models.PurchaseOrderItem;
+var Item = models.Item;
+var ObjectId = require('mongoose').Types.ObjectId;
 
 
-// router.get('/', function(req, res){ 
-// 	Supplier.find(function(err, suppliers){
-// 		if (err) { res.status(500).send(err); } else {
-// 			res.json(suppliers);
-// 		}
-// 	});
-// });
+router.get('/', function(req, res){ 
+	PurchaseOrderItem.find({purchaseorder: new ObjectId(req.params.porderid)}).exec(function(err, porderitems){
+		if (err) { res.status(500).send(err); } else {
+			res.json(porderitems);
+		}
+	});
+});
 
-// router.post('/', function(req, res){ 
-// 	var supplier = new Supplier;
-// 	supplier.name = req.body.name;
-// 	supplier.desc = req.body.desc;
-// 	supplier.save(function(err){
-// 		if (err) { res.status(500).send('unable to create supplier'); } else {
-// 			res.json(supplier);
-// 		}
-// 	});
-// });
+router.post('/', function(req, res){ 
+	PurchaseOrder.findById(req.params.porderid, function(err, porder){
+		var porderitem = new PurchaseOrderItem;
+		porderitem.count = req.body.count;
+		porderitem.price = req.body.price;
+		porderitem.item = req.body.item;
+		porderitem.purchaseorder = porder;
+		porderitem.save(function(err){
+			if (err) { res.status(500).send('unable to create purchase order item' + err); } else {
+				Item.findById(porderitem.item, function(err, item){
+					item.count = item.count + porderitem.count;
+					item.save(function(err){
+						if (err) { res.status(500).send('unable to update item count' + err); } else {
+							console.log(item);
+							porderitem.item = item;
+							res.json(item);			
+						}
+					}); // save item
+				}); // find item
+			}
+		}); // save porderitem
+	});// find purchase order	
+});
 
 // router.get('/:supplierid', function(req, res){
 // 	console.log(req.params.supplierid);

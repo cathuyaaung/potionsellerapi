@@ -14,7 +14,7 @@ var PurchaseOrder = require('./PurchaseOrder');
 exports.PurchaseOrder = PurchaseOrder;
 
 var PurchaseOrderItem = require('./PurchaseOrderItem');
-exports.PurchaseOrder = PurchaseOrderItem;
+exports.PurchaseOrderItem = PurchaseOrderItem;
 
 var PurchaseOrderPayment = require('./PurchaseOrderPayment');
-exports.PurchaseOrder = PurchaseOrderPayment;
+exports.PurchaseOrderPayment = PurchaseOrderPayment;

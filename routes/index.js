@@ -45,7 +45,7 @@ router.use('/supplier', supplierRouter);
 router.use('/customer', customerRouter);
 
 // Purchase Order
-router.use('/purchaseorder', purchaseOrderRouter);
+router.use('/porder', purchaseOrderRouter);
 
 // Purchase Order Item
 router.use('/porder/:porderid/pitem', purchaseOrderItemRouter);

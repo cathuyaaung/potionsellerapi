@@ -7,7 +7,9 @@
     "body-parser": "^1.14.1",
     "express": "^4.13.3",
     "flightplan": "^0.6.6",
+    "lodash": "^3.10.1",
     "mongoose": "^4.2.5",
+    "mongoose-autopopulate": "^0.4.0",
     "morgan": "^1.6.1"
   }
 }
