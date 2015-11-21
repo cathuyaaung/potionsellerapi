@@ -17,6 +17,16 @@ var ItemSchema = new Schema({
 		required: true,
 		default: 0
 	},
+	suggestedsaleprice: {
+		type: Number,
+		required: true,
+		default: 0
+	},
+	lowinventorythreshold: {
+		type: Number,
+		required: true,
+		default: 1
+	},
 	category: {
 		type: Schema.ObjectId,
 		ref: 'Category'

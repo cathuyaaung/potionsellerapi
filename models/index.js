@@ -10,11 +10,22 @@ exports.Supplier = Supplier;
 var Customer = require('./customer');
 exports.Customer = Customer;
 
-var PurchaseOrder = require('./purchaseOrder');
+
+var PurchaseOrder = require('./purchaseorder');
 exports.PurchaseOrder = PurchaseOrder;
 
-var PurchaseOrderItem = require('./purchaseOrderItem');
+var PurchaseOrderItem = require('./purchaseorderitem');
 exports.PurchaseOrderItem = PurchaseOrderItem;
 
-var PurchaseOrderPayment = require('./purchaseOrderPayment');
+var PurchaseOrderPayment = require('./purchaseorderpayment');
 exports.PurchaseOrderPayment = PurchaseOrderPayment;
+
+
+var SaleOrder = require('./saleorder');
+exports.SaleOrder = SaleOrder;
+
+var SaleOrderItem = require('./saleorderitem');
+exports.SaleOrderItem = SaleOrderItem;
+
+var SaleOrderPayment = require('./saleorderpayment');
+exports.SaleOrderPayment = SaleOrderPayment;

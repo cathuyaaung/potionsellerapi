@@ -4,6 +4,7 @@
   "description": "REST API Project for Point of Sale and Inventory Management",
   "author": "thuyaaung",
   "dependencies": {
+    "async": "^1.5.0",
     "body-parser": "^1.14.1",
     "express": "^4.13.3",
     "flightplan": "^0.6.6",

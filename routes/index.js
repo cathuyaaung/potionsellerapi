@@ -2,14 +2,21 @@
 var express = require('express');
 var router = express.Router({mergeParams: true});
 
+
 var categoryRouter 		= require('./categoryRouter');
 var itemRouter 			= require('./itemRouter');
-var supplierRouter 		= require('./supplierRouter');
+
 var supplierRouter 		= require('./supplierRouter');
 var customerRouter 		= require('./customerRouter');
+
 var purchaseOrderRouter 		= require('./purchaseOrderRouter');
 var purchaseOrderItemRouter 	= require('./purchaseOrderItemRouter');
 var purchaseOrderPaymentRouter 	= require('./purchaseOrderPaymentRouter');
+
+var saleOrderRouter 		= require('./saleOrderRouter');
+var saleOrderItemRouter 	= require('./saleOrderItemRouter');
+var saleOrderPaymentRouter 	= require('./saleOrderPaymentRouter');
+
 
 // Default Start
 router.use(function(req, res, next){
@@ -38,11 +45,13 @@ router.use('/category/:categoryid/item', itemRouter);
 //Each Item
 router.use('/item/', itemRouter);
 
+
 //Supplier
 router.use('/supplier', supplierRouter);
 
 // Customer
 router.use('/customer', customerRouter);
+
 
 // Purchase Order
 router.use('/porder', purchaseOrderRouter);
@@ -51,25 +60,19 @@ router.use('/porder', purchaseOrderRouter);
 router.use('/porder/:porderid/pitem', purchaseOrderItemRouter);
 
 // Purchase Order Payment Item
-router.use('/porder/:porderid/payment', purchaseOrderPaymentRouter);
+router.use('/porder/:porderid/ppayment', purchaseOrderPaymentRouter);
 
 
+// Sale Order
+router.use('/sorder', saleOrderRouter);
+
+// Sale Order Item
+router.use('/sorder/:sorderid/sitem', saleOrderItemRouter);
+
+// Sale Order Payment Item
+router.use('/sorder/:sorderid/spayment', saleOrderPaymentRouter);
 
 
-
-
-
-router.post('/upload', function(req, res){
-	var path = require('path'),
-    fs = require('fs');
-	var tempPath = req.files.file.path;
-	var targetPath = path.resolve('./uploadFiles/' + req.files.file.name);
-	fs.rename(tempPath, targetPath, function(err) {
-		if (err) { res.send(err); } else {
-			console.log("Upload completed!");	
-		}
-	});
-});
 
 
 // 404
