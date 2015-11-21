@@ -18,13 +18,21 @@ var saleOrderItemRouter 	= require('./saleOrderItemRouter');
 var saleOrderPaymentRouter 	= require('./saleOrderPaymentRouter');
 
 
+var whitelist = {
+	'http://localhost:3333': true,
+	'http://www.lawkanet.com': true,
+	'http://lawkanet.com': true
+};
+
 // Default Start
 router.use(function(req, res, next){
-	// Allow CORS
-	res.header("Access-Control-Allow-Origin", "*");
-  	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  	res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-	next();
+	if(whitelist[req.headers.origin]){
+		// Allow CORS
+		res.header('Access-Control-Allow-Origin', '*');
+	  	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	  	res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+		next();
+	}
 });
 
 // HOME
