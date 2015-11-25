@@ -29,3 +29,10 @@ exports.SaleOrderItem = SaleOrderItem;
 
 var SaleOrderPayment = require('./saleorderpayment');
 exports.SaleOrderPayment = SaleOrderPayment;
+
+
+var Company = require('./company');
+exports.Company = Company;
+
+var User = require('./user');
+exports.User = User;

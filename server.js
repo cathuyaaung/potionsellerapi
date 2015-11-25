@@ -5,6 +5,7 @@ var app 		= express();
 var morgan 		= require('morgan')
 var bodyParser 	= require('body-parser');
 var mongoose 	= require('mongoose');
+var methodOverride = require('method-override');
 
 var config 		= require('./config');
 configs 		= config();
@@ -15,6 +16,10 @@ console.log(configs);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(morgan('dev'))
+app.use(methodOverride('X-HTTP-Method-Override'))
+
+
+app.set('superSecret', 'how now brown cow');
 
 
 // Uploads
@@ -39,7 +44,16 @@ var port = config().port;
 var router = require('./routes');
 app.use('/', router);
 
+
+// The NodeJS app may crash if an error occurs. 
+// Crash is prevented and an error log is printed in the console.
+process.on('uncaughtException', function(err) {
+    console.log(err);
+});
+
 // Start app
 // ---------
 app.listen(port);
 console.log('Magic happening at: ' + port);
+
+module.exports = app;

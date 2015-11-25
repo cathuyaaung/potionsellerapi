@@ -1,7 +1,7 @@
 
 var express = require('express');
 var router = express.Router({mergeParams: true});
-
+var jwt = require('jsonwebtoken');
 
 var categoryRouter 		= require('./categoryRouter');
 var itemRouter 			= require('./itemRouter');
@@ -17,6 +17,9 @@ var saleOrderRouter 		= require('./saleOrderRouter');
 var saleOrderItemRouter 	= require('./saleOrderItemRouter');
 var saleOrderPaymentRouter 	= require('./saleOrderPaymentRouter');
 
+var userRouter 	= require('./userRouter');
+
+
 
 var whitelist = {
 	'http://localhost:3333': true,
@@ -29,7 +32,7 @@ router.use(function(req, res, next){
 	if(whitelist[req.headers.origin]){
 		// Allow CORS
 		res.header('Access-Control-Allow-Origin', '*');
-	  	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+	  	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, auth, x-access-token');
 	  	res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');		
 	}
 	
@@ -42,7 +45,28 @@ router.get('/', function(req, res){
 });
 
 
+router.use('/user', userRouter);
 
+
+router.use(function(req, res, next){
+	var token = req.body.token || req.query.token || req.headers['auth'];
+	if(token){
+		console.log('has token');
+
+	    jwt.verify(token, req.app.get('superSecret'), function(err, decoded) {      
+	      if (err) {
+	        return res.json({ success: false, message: 'Failed to authenticate token.' });    
+	      } else {
+	        // if everything is good, save to request for use in other routes
+	        req.decoded = decoded;    
+	        next();
+	      }
+	    });
+
+	}else{
+		return res.json({ success: false, message: 'Failed to authenticate token.' });	
+	}
+});
 
 
 //Category
