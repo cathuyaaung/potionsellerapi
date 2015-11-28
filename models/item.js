@@ -30,7 +30,15 @@ var ItemSchema = new Schema({
 	category: {
 		type: Schema.ObjectId,
 		ref: 'Category'
-	}
+	},
+	company: {
+		type: Schema.ObjectId,
+		ref: 'Company',
+		autopopulate: true,
+		required: true		
+	}	
 });
+
+ItemSchema.plugin(require('mongoose-autopopulate'));
 
 module.exports = mongoose.model('Item', ItemSchema);

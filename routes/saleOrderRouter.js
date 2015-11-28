@@ -52,42 +52,5 @@ router.post('/', function(req, res){
 
 });
 
-// router.get('/:porderid', function(req, res){
-// 	Supplier.findById(req.params.porderid, function(err, porder){
-// 		res.json(porder);
-// 	});
-// });
-
-
-// router.delete('/:porderid', function(req, res){
-// 	//F ind POItems
-// 	SaleOrderItem.find({purchaseorder: new ObjectId(req.params.porderid)}).exec(function(err, porderitems){
-// 		_.forEach(porderitems, function(n){
-// 			// Deduct Item Count
-// 			Item.findById(n.item._id, function(err, item){
-// 				item.count = item.count - n.count;
-// 				item.save(function(err){
-// 					if (err) { res.status(500).send('unable to update item count' + err); } else {
-// 						console.log('deducted');
-// 					}
-// 				}); // save item
-// 			}); // find item
-// 			// Delete POItem
-// 			n.remove(function(err){
-// 				if (err) { res.status(500).send('unable to delete purchase order item'); } else {
-// 					console.log('poitem deleted');
-// 				}
-// 			});
-// 		});
-// 	});
-// 	//Delete POItems
-// 	//Deduct Item counts
-// 	PurchaseOrder.remove({_id: req.params.porderid}, function(err){
-// 		if (err) { res.status(500).send('unable to delete purchase order'); } else {
-// 			res.json({message: 'purchase order deleted'});
-// 		}
-// 	})
-// });
-
 
 module.exports = router;

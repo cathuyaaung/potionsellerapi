@@ -17,6 +17,8 @@ var saleOrderRouter 		= require('./saleOrderRouter');
 var saleOrderItemRouter 	= require('./saleOrderItemRouter');
 var saleOrderPaymentRouter 	= require('./saleOrderPaymentRouter');
 
+var registerRouter 	= require('./registerRouter');
+var loginRouter 	= require('./loginRouter');
 var userRouter 	= require('./userRouter');
 
 
@@ -45,7 +47,8 @@ router.get('/', function(req, res){
 });
 
 
-router.use('/user', userRouter);
+router.use('/register', registerRouter);
+router.use('/login', loginRouter);
 
 
 router.use(function(req, res, next){
@@ -57,7 +60,6 @@ router.use(function(req, res, next){
 	      if (err) {
 	        return res.json({ success: false, message: 'Failed to authenticate token.' });    
 	      } else {
-	        // if everything is good, save to request for use in other routes
 	        req.decoded = decoded;    
 	        next();
 	      }
@@ -68,6 +70,8 @@ router.use(function(req, res, next){
 	}
 });
 
+
+router.use('/user', userRouter);
 
 //Category
 router.use('/category', categoryRouter);

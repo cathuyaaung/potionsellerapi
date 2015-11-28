@@ -18,11 +18,16 @@ router.get('/', function(req, res){
 
 // POST
 router.route('/').post(function(req, res){	
+	console.log(req.decoded.company);
 	var category = new Category;
 	category.name = req.body.name;
 	category.desc = req.body.desc;
+	category.company = req.decoded.company;
 	category.save(function(err){
-		if (err) { res.send(err); } else {
+		if (err) { 
+			console.log(err);
+			res.send(err); 
+		} else {
 			res.json( { message: 'Category created', category } );	
 		}
 	});
