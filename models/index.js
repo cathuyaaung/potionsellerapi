@@ -12,13 +12,14 @@ exports.Customer = Customer;
 
 
 var PurchaseOrder = require('./purchaseorder');
-exports.PurchaseOrder = PurchaseOrder;
+exports.PurchaseOrder = PurchaseOrder.PurchaseOrder;
+exports.PurchaseOrderItem = PurchaseOrder.PurchaseOrderItem;
+exports.PurchaseOrderPayment = PurchaseOrder.PurchaseOrderPayment;
+// var PurchaseOrderItem = require('./purchaseorderitem');
+// exports.PurchaseOrderItem = PurchaseOrderItem;
 
-var PurchaseOrderItem = require('./purchaseorderitem');
-exports.PurchaseOrderItem = PurchaseOrderItem;
-
-var PurchaseOrderPayment = require('./purchaseorderpayment');
-exports.PurchaseOrderPayment = PurchaseOrderPayment;
+// var PurchaseOrderPayment = require('./purchaseorderpayment');
+// exports.PurchaseOrderPayment = PurchaseOrderPayment;
 
 
 var SaleOrder = require('./saleorder');

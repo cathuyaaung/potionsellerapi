@@ -1,15 +1,16 @@
 var _ 		= require('lodash');
+var async 	= require('async');
 var router 	= require('express').Router({mergeParams: true});
 var models 	= require('./../models');
 var ObjectId = require('mongoose').Types.ObjectId;
 
 var PurchaseOrder 		= models.PurchaseOrder;
-var PurchaseOrderItem 	= models.PurchaseOrderItem;
+var PurchaseOrderPayment= models.PurchaseOrderPayment;
 var Supplier 			= models.Supplier;
 var Item 				= models.Item;
 
 router.get('/', function(req, res){ 
-	PurchaseOrder.find().sort({date: -1}).exec(function(err, porders){
+	PurchaseOrder.find().sort({updatedAt: -1}).exec(function(err, porders){
 		if (err) { res.status(500).send(err); } else {
 			res.json(porders);
 		}
@@ -17,18 +18,44 @@ router.get('/', function(req, res){
 });
 
 router.post('/', function(req, res){ 
-	Supplier.findById(req.body.supplier, function(err, supplier){
-		var porder = new PurchaseOrder;
-		porder.supplier = supplier._id;
-		porder.total = req.body.total;
-		porder.remaining = req.body.remaining;
-		console.log(porder);
-		porder.save(function(err){
-			if (err) { res.status(500).send('unable to create purchase order ' + err); } else {
-				res.json(porder);
-			}
-		});
+	console.log(req.body);
+	// res.json('ok');
+
+	var porder = new PurchaseOrder;
+	porder.supplier = req.body.supplier;
+	porder.total = req.body.total;
+	porder.remaining = req.body.remaining;
+	porder.poitems = req.body.poitems;
+	porder.save(function(err){
+		if (err) { 
+			res.status(500).send('unable to create purchase order ' + err); 
+		} else {
+
+
+			async.each(porder.poitems, function(poitem, callback){
+				console.log(poitem.item);
+				Item.findById(poitem.item, function(err, item){
+					item.count = item.count + poitem.count;
+					item.save(function(err){
+						if (err) { res.status(500).send('unable to update item count' + err); } else {
+							console.log(item.name + ' increased by ' + poitem.count);
+							callback();
+						}
+					}); // save item
+				}); // find item
+								
+			}, function(err){
+				res.json({
+					success: true,
+					data: porder
+				});
+			});
+
+
+
+		}
 	});
+
 });
 
 router.get('/:porderid', function(req, res){
@@ -38,34 +65,51 @@ router.get('/:porderid', function(req, res){
 });
 
 
-router.delete('/:porderid', function(req, res){
-	//F ind POItems
-	PurchaseOrderItem.find({purchaseorder: new ObjectId(req.params.porderid)}).exec(function(err, porderitems){
-		_.forEach(porderitems, function(n){
-			// Deduct Item Count
-			Item.findById(n.item._id, function(err, item){
-				item.count = item.count - n.count;
-				item.save(function(err){
-					if (err) { res.status(500).send('unable to update item count' + err); } else {
-						console.log('deducted');
-					}
-				}); // save item
-			}); // find item
-			// Delete POItem
-			n.remove(function(err){
-				if (err) { res.status(500).send('unable to delete purchase order item'); } else {
-					console.log('poitem deleted');
-				}
+router.post('/:porderid/addpayment', function(req, res){
+	PurchaseOrder.findById(req.params.porderid).exec(function(err, porder){
+		if (err) { res.status(500).json({success: false, message: 'unable to find purchase order'}); } else {
+			console.log(porder);
+			var payment = new PurchaseOrderPayment;
+			payment.amount = req.body.amount;
+			// {
+			// 	amount: req.body.amount
+			// };
+			porder.popayments.push(payment);
+			porder.remaining = porder.remaining - req.body.amount;
+			porder.save(function(err){
+				console.log(porder)
+				res.json({
+					success: true,
+					data: porder
+				});
 			});
-		});
-	});
-	//Delete POItems
-	//Deduct Item counts
-	PurchaseOrder.remove({_id: req.params.porderid}, function(err){
-		if (err) { res.status(500).send('unable to delete purchase order'); } else {
-			res.json({message: 'purchase order deleted'});
 		}
-	})
+	});
+});
+
+router.delete('/:porderid', function(req, res){
+	PurchaseOrder.findById(req.params.porderid).exec(function(err, porder){
+		if (err) { res.status(500).json({success: false, message: 'unable to find purchase order'}); } else {
+			async.each(porder.poitems, function(poitem, callback){
+				console.log(poitem.item);
+				Item.findById(poitem.item, function(err, item){
+					item.count = item.count - poitem.count;
+					item.save(function(err){
+						if (err) { res.status(500).send('unable to update item count' + err); } else {
+							console.log(item.name + ' decreased by ' + poitem.count);
+							callback();
+						}
+					}); // save item
+				}); // find item								
+			}, function(err){
+				PurchaseOrder.remove({_id: req.params.porderid}, function(err){
+					if (err) { res.status(500).json({success: false, message: 'unable to delete purchase order'}); } else {
+						res.json({success: true, message: 'purchase order deleted'});
+					}
+				});
+			});
+		}
+	});
 });
 
 

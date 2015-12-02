@@ -1,12 +1,33 @@
+var async 	= require('async');
+
 var router = require('express').Router({mergeParams: true});
 var models = require('./../models');
 var Supplier = models.Supplier;
+var PurchaseOrder = models.PurchaseOrder;
 
 
 router.get('/', function(req, res){ 
+	var result=[];
+
 	Supplier.find(function(err, suppliers){
 		if (err) { res.status(500).send(err); } else {
-			res.json(suppliers);
+			async.each(suppliers, function(supplier, callback){			
+				
+				var supplierObj = supplier.toObject();				
+
+				PurchaseOrder.find({supplier: supplier}, function(err, porders){
+					var supplierTotalRemaining = 0
+					for(var i=0; i<porders.length; i++){
+						supplierTotalRemaining = supplierTotalRemaining + porders[i].remaining;
+					}
+					supplierObj.totalremaining = supplierTotalRemaining;
+					result.push(supplierObj);
+					callback();					
+				});
+
+			}, function(err){
+				res.json(result);
+			});
 		}
 	});
 });

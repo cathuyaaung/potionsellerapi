@@ -35,7 +35,7 @@ var ItemSchema = new Schema({
 		type: Schema.ObjectId,
 		ref: 'Company',
 		autopopulate: true,
-		required: true		
+		required: false		
 	}	
 });
 
