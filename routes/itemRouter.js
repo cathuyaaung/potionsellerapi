@@ -9,7 +9,7 @@ var Item = models.Item;
 
 // GET ALL
 router.get('/', function(req, res){ 
-	Item.find({ category: req.params.categoryid }, function(err, items){
+	Item.find({company: req.decoded.company}).exec({ category: req.params.categoryid }, function(err, items){
 		if (err) { res.send(err); } else {
 			Item.populate(items, { path:'category' }, function(err, items){
 				if (err) { res.send(err); } else {
@@ -26,6 +26,7 @@ router.route('/').post(function(req, res){
 		if (err) { res.send(err); }
 		console.log(category);
 		var item = new Item;
+		item.company = req.decoded.company;
 		item.name = req.body.name;
 		item.desc = req.body.desc;
 		item.category = category;
@@ -33,7 +34,7 @@ router.route('/').post(function(req, res){
 			if (err) { res.send(err); } else {
 				Item.populate(item, { path:'category' }, function(err, item){
 					if (err) { res.send(err); } else {
-						res.json( { message: 'item created', item } );
+						res.json( { message: 'item created', data: item } );
 					}
 				});
 			}
@@ -64,7 +65,7 @@ router.put('/:itemid', function(req, res){
 				if (err) { res.send(err); } else {
 					Item.populate(item, {path:'category'}, function(err, item){
 						if (err) { res.send(err); } else {
-							res.json( { message: 'Item updated', item } );
+							res.json( { message: 'Item updated', data: item } );
 						}
 					});
 				}

@@ -14,8 +14,8 @@ var purchaseOrderRouter 		= require('./purchaseOrderRouter');
 // var purchaseOrderPaymentRouter 	= require('./purchaseOrderPaymentRouter');
 
 var saleOrderRouter 		= require('./saleOrderRouter');
-var saleOrderItemRouter 	= require('./saleOrderItemRouter');
-var saleOrderPaymentRouter 	= require('./saleOrderPaymentRouter');
+// var saleOrderItemRouter 	= require('./saleOrderItemRouter');
+// var saleOrderPaymentRouter 	= require('./saleOrderPaymentRouter');
 
 var registerRouter 	= require('./registerRouter');
 var loginRouter 	= require('./loginRouter');
@@ -93,21 +93,8 @@ router.use('/customer', customerRouter);
 // Purchase Order
 router.use('/porder', purchaseOrderRouter);
 
-// // Purchase Order Item
-// router.use('/porder/:porderid/pitem', purchaseOrderItemRouter);
-
-// // Purchase Order Payment Item
-// router.use('/porder/:porderid/ppayment', purchaseOrderPaymentRouter);
-
-
 // Sale Order
 router.use('/sorder', saleOrderRouter);
-
-// Sale Order Item
-router.use('/sorder/:sorderid/sitem', saleOrderItemRouter);
-
-// Sale Order Payment Item
-router.use('/sorder/:sorderid/spayment', saleOrderPaymentRouter);
 
 
 

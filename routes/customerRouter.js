@@ -27,9 +27,9 @@ router.get('/', function(req, res){
 
 router.post('/', function(req, res){ 
 	var customer = new Customer;
+	customer.company = req.decoded.company;
 	customer.name = req.body.name;
 	customer.desc = req.body.desc;
-	customer.company = req.decoded.company;
 	customer.save(function(err){
 		if (err) { res.status(500).send('unable to create customer'); } else {
 			res.json(customer);

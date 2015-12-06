@@ -9,7 +9,7 @@ var Category = models.Category;
 
 // GET ALL
 router.get('/', function(req, res){ 
-	Category.find(function(err, categories){
+	Category.find({company: req.decoded.company}).exec(function(err, categories){
 		if (err) { res.send(err); } else {
 			res.json(categories);
 		}
@@ -20,15 +20,15 @@ router.get('/', function(req, res){
 router.route('/').post(function(req, res){	
 	console.log(req.decoded.company);
 	var category = new Category;
+	category.company = req.decoded.company;
 	category.name = req.body.name;
 	category.desc = req.body.desc;
-	category.company = req.decoded.company;
 	category.save(function(err){
 		if (err) { 
 			console.log(err);
 			res.send(err); 
 		} else {
-			res.json( { message: 'Category created', category } );	
+			res.json( { message: 'Category created', data: category } );	
 		}
 	});
 });
@@ -52,7 +52,7 @@ router.put('/:id', function(req, res){
 				category.save(function(err){
 					console.log(category);
 					if (err) { res.send(err); } else {
-						res.json( {message: 'Category updated', category} );
+						res.json( {message: 'Category updated', data: category} );
 					}
 				});
 			} else {

@@ -8,13 +8,10 @@ var PurchaseOrder = models.PurchaseOrder;
 
 router.get('/', function(req, res){ 
 	var result=[];
-
 	Supplier.find({company:req.decoded.company}).exec(function(err, suppliers){
 		if (err) { res.status(500).send(err); } else {
-			async.each(suppliers, function(supplier, callback){			
-				
+			async.each(suppliers, function(supplier, callback){							
 				var supplierObj = supplier.toObject();				
-
 				PurchaseOrder.find({supplier: supplier}, function(err, porders){
 					var supplierTotalRemaining = 0
 					for(var i=0; i<porders.length; i++){
@@ -24,19 +21,16 @@ router.get('/', function(req, res){
 					result.push(supplierObj);
 					callback();					
 				});
-
-			}, function(err){
-				res.json(result);
-			});
+			}, function(err){ res.json(result); });
 		}
 	});
 });
 
 router.post('/', function(req, res){ 
 	var supplier = new Supplier;
+	supplier.company = req.decoded.company;
 	supplier.name = req.body.name;
 	supplier.desc = req.body.desc;
-	supplier.company = req.decoded.company;
 	supplier.save(function(err){
 		if (err) { res.status(500).send('unable to create supplier'); } else {
 			res.json(supplier);
