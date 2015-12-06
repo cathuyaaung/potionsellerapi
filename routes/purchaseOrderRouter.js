@@ -10,7 +10,7 @@ var Supplier 			= models.Supplier;
 var Item 				= models.Item;
 
 router.get('/', function(req, res){ 
-	PurchaseOrder.find().sort({updatedAt: -1}).exec(function(err, porders){
+	PurchaseOrder.find({company:req.decoded.company}).sort({updatedAt: -1}).exec(function(err, porders){
 		if (err) { res.status(500).send(err); } else {
 			res.json(porders);
 		}
@@ -18,10 +18,8 @@ router.get('/', function(req, res){
 });
 
 router.post('/', function(req, res){ 
-	console.log(req.body);
-	// res.json('ok');
-
 	var porder = new PurchaseOrder;
+	porder.company = req.decoded.company;
 	porder.supplier = req.body.supplier;
 	porder.total = req.body.total;
 	porder.remaining = req.body.remaining;
@@ -30,10 +28,7 @@ router.post('/', function(req, res){
 		if (err) { 
 			res.status(500).send('unable to create purchase order ' + err); 
 		} else {
-
-
 			async.each(porder.poitems, function(poitem, callback){
-				console.log(poitem.item);
 				Item.findById(poitem.item, function(err, item){
 					item.count = item.count + poitem.count;
 					item.save(function(err){
@@ -42,27 +37,20 @@ router.post('/', function(req, res){
 							callback();
 						}
 					}); // save item
-				}); // find item
-								
+				}); // find item								
 			}, function(err){
-				res.json({
-					success: true,
-					data: porder
-				});
+				res.json({ success: true, data: porder });
 			});
-
-
-
 		}
 	});
 
 });
 
-router.get('/:porderid', function(req, res){
-	Supplier.findById(req.params.porderid, function(err, porder){
-		res.json(porder);
-	});
-});
+// router.get('/:porderid', function(req, res){
+// 	Supplier.findById(req.params.porderid, function(err, porder){
+// 		res.json(porder);
+// 	});
+// });
 
 
 router.post('/:porderid/addpayment', function(req, res){
@@ -71,9 +59,6 @@ router.post('/:porderid/addpayment', function(req, res){
 			console.log(porder);
 			var payment = new PurchaseOrderPayment;
 			payment.amount = req.body.amount;
-			// {
-			// 	amount: req.body.amount
-			// };
 			porder.popayments.push(payment);
 			porder.remaining = porder.remaining - req.body.amount;
 			porder.save(function(err){

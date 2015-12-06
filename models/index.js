@@ -15,21 +15,12 @@ var PurchaseOrder = require('./purchaseorder');
 exports.PurchaseOrder = PurchaseOrder.PurchaseOrder;
 exports.PurchaseOrderItem = PurchaseOrder.PurchaseOrderItem;
 exports.PurchaseOrderPayment = PurchaseOrder.PurchaseOrderPayment;
-// var PurchaseOrderItem = require('./purchaseorderitem');
-// exports.PurchaseOrderItem = PurchaseOrderItem;
-
-// var PurchaseOrderPayment = require('./purchaseorderpayment');
-// exports.PurchaseOrderPayment = PurchaseOrderPayment;
 
 
 var SaleOrder = require('./saleorder');
-exports.SaleOrder = SaleOrder;
-
-var SaleOrderItem = require('./saleorderitem');
-exports.SaleOrderItem = SaleOrderItem;
-
-var SaleOrderPayment = require('./saleorderpayment');
-exports.SaleOrderPayment = SaleOrderPayment;
+exports.SaleOrder = SaleOrder.SaleOrder;
+exports.SaleOrderItem = SaleOrder.SaleOrderItem;
+exports.SaleOrderPayment = SaleOrder.SaleOrderPayment;
 
 
 var Company = require('./company');

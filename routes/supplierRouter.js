@@ -9,7 +9,7 @@ var PurchaseOrder = models.PurchaseOrder;
 router.get('/', function(req, res){ 
 	var result=[];
 
-	Supplier.find(function(err, suppliers){
+	Supplier.find({company:req.decoded.company}).exec(function(err, suppliers){
 		if (err) { res.status(500).send(err); } else {
 			async.each(suppliers, function(supplier, callback){			
 				
@@ -36,6 +36,7 @@ router.post('/', function(req, res){
 	var supplier = new Supplier;
 	supplier.name = req.body.name;
 	supplier.desc = req.body.desc;
+	supplier.company = req.decoded.company;
 	supplier.save(function(err){
 		if (err) { res.status(500).send('unable to create supplier'); } else {
 			res.json(supplier);

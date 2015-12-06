@@ -1,5 +1,4 @@
 var mongoose 	= require('mongoose');
-var timestamp 	= require('mongoose-timestamp')
 var Schema 		= mongoose.Schema;
 
 
@@ -48,6 +47,12 @@ var PurchaseOrderSchema = new Schema({
 		required: false,
 		default: 0
 	},
+	company: {
+		type: Schema.ObjectId,
+		ref: 'Company',
+		autopopulate: true,
+		required: false		
+	},
 	poitems: [PurchaseOrderItemSchema],
 	popayments: [PurchaseOrderPaymentSchema]
 });
@@ -56,9 +61,7 @@ var PurchaseOrderSchema = new Schema({
 
 
 PurchaseOrderSchema.plugin(require('mongoose-autopopulate'));
-PurchaseOrderSchema.plugin(timestamp);
-PurchaseOrderItemSchema.plugin(require('mongoose-autopopulate'));
-PurchaseOrderPaymentSchema.plugin(timestamp);
+PurchaseOrderSchema.plugin(require('mongoose-timestamp'));
 
 // module.exports = mongoose.model('PurchaseOrder', PurchaseOrderSchema);
 exports.PurchaseOrder = mongoose.model('PurchaseOrder', PurchaseOrderSchema);
