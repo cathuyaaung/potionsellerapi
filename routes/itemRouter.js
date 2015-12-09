@@ -9,7 +9,7 @@ var Item = models.Item;
 
 // GET ALL
 router.get('/', function(req, res){ 
-	Item.find({company: req.decoded.company}).exec({ category: req.params.categoryid }, function(err, items){
+	Item.find({company: req.decoded.company, category: req.params.categoryid}).exec(function(err, items){
 		if (err) { res.send(err); } else {
 			Item.populate(items, { path:'category' }, function(err, items){
 				if (err) { res.send(err); } else {

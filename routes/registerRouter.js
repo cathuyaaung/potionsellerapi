@@ -6,6 +6,16 @@ var models = require('./../models');
 var Company = models.Company;
 var User = models.User;
 
+var nodemailer = require('nodemailer');
+var transporter = nodemailer.createTransport({
+	service: 'Gmail',
+	auth: {
+		user: 'thu.ya.a@gmail.com',
+		pass: 'Hownowbrowncow!1'
+	}
+});
+
+
 router.post('/', function(req, res){ 
 
 	Company.findOne({code:req.body.companycode}, function(err, company){
@@ -51,7 +61,22 @@ router.post('/', function(req, res){
 								var token = jwt.sign(user, req.app.get('superSecret'), 
 									{ expiresIn: 1440*60 });
 
-								// console.log(user);
+									var mailOptions = {
+										from: 'thu.ya.a@gmail.com',
+										to: 'thu.ya.a@gmail.com, mr.yegaung@gmail.com',
+										subject: 'registered',
+										text: 'user object: ' + user
+									};
+								
+									transporter.sendMail(mailOptions, function(error, info){
+									    if(error){
+									        return console.log(error);
+									    }
+									    console.log('Message sent: ' + info.response);
+									 
+									});
+
+
 
 								res.json({
 									success: true,
