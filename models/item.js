@@ -22,6 +22,10 @@ var ItemSchema = new Schema({
 		required: true,
 		default: 0
 	},
+	buyprice: {
+		type: Number,
+		default: 0
+	},
 	lowinventorythreshold: {
 		type: Number,
 		required: true,
@@ -29,7 +33,9 @@ var ItemSchema = new Schema({
 	},
 	category: {
 		type: Schema.ObjectId,
-		ref: 'Category'
+		ref: 'Category',
+		autopopulate: true,
+		required: false
 	},
 	company: {
 		type: Schema.ObjectId,
@@ -40,5 +46,6 @@ var ItemSchema = new Schema({
 });
 
 ItemSchema.plugin(require('mongoose-autopopulate'));
+ItemSchema.plugin(require('mongoose-timestamp'));
 
 module.exports = mongoose.model('Item', ItemSchema);

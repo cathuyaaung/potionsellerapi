@@ -9,7 +9,9 @@ var Item = models.Item;
 
 // GET ALL
 router.get('/', function(req, res){ 
-	Item.find({company: req.decoded.company, category: req.params.categoryid}).exec(function(err, items){
+	Item.find({company: req.decoded.company, category: req.params.categoryid})
+	.sort({updatedAt: -1})
+	.exec(function(err, items){
 		if (err) { res.send(err); } else {
 			Item.populate(items, { path:'category' }, function(err, items){
 				if (err) { res.send(err); } else {
@@ -24,19 +26,21 @@ router.get('/', function(req, res){
 router.route('/').post(function(req, res){	
 	Category.findById(req.params.categoryid, function(err, category){
 		if (err) { res.send(err); }
+		console.log('category');
 		console.log(category);
 		var item = new Item;
 		item.company = req.decoded.company;
+		item.category = category;		
 		item.name = req.body.name;
 		item.desc = req.body.desc;
-		item.category = category;
+		item.count = req.body.count;
+		item.buyprice = req.body.buyprice;
+		item.suggestedsaleprice = req.body.suggestedsaleprice;
+		item.lowinventorythreshold = req.body.lowinventorythreshold;		
 		item.save(function(err){
 			if (err) { res.send(err); } else {
-				Item.populate(item, { path:'category' }, function(err, item){
-					if (err) { res.send(err); } else {
-						res.json( { message: 'item created', data: item } );
-					}
-				});
+				console.log('item ' + item);
+				res.json( { success: true, message: 'item created', data: item } );
 			}
 		});			
 	});
