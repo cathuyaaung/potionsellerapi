@@ -5,6 +5,7 @@ var jwt = require('jsonwebtoken');
 
 var categoryRouter 		= require('./categoryRouter');
 var itemRouter 			= require('./itemRouter');
+var itemsRouter 			= require('./itemsRouter');
 
 var supplierRouter 		= require('./supplierRouter');
 var customerRouter 		= require('./customerRouter');
@@ -31,12 +32,12 @@ var whitelist = {
 
 // Default Start
 router.use(function(req, res, next){
-	if(whitelist[req.headers.origin]){
+	//if(whitelist[req.headers.origin]){
 		// Allow CORS
 		res.header('Access-Control-Allow-Origin', '*');
 	  	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, auth, x-access-token');
 	  	res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');		
-	}
+	//}
 	
 	next();
 });
@@ -55,6 +56,7 @@ router.use(function(req, res, next){
 	var token = req.body.token || req.query.token || req.headers['auth'];
 	if(token){
 		console.log('has token');
+		console.log(token);
 
 	    jwt.verify(token, req.app.get('superSecret'), function(err, decoded) {      
 	      if (err) {
@@ -80,8 +82,10 @@ router.use('/category', categoryRouter);
 router.use('/category/:categoryid/item', itemRouter);
 
 //Each Item
-router.use('/item/', itemRouter);
+router.use('/items/', itemsRouter);
 
+//Each Item
+router.use('/item/', itemRouter);
 
 //Supplier
 router.use('/supplier', supplierRouter);
